@@ -1,0 +1,1256 @@
+--[[
+    NICKZ LIBRARY V1.6
+    Independent Interface
+    Created by Nickz
+    LucideBlox Icons
+    Halloween Update
+    Rounded Minimize Fix
+    Clean Dropdown
+]]
+
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local UIS = game:GetService("UserInputService")
+
+local Player = Players.LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
+
+-- CONFIGURAÇÕES
+local Config = {
+    Name = "Nickz Library",
+    Version = "V1.6",
+
+    Logo = "rbxassetid://0",
+
+    Width = 560,
+    Height = 350,
+
+    Background = Color3.fromRGB(13, 7, 9),
+    Topbar = Color3.fromRGB(24, 7, 11),
+    Sidebar = Color3.fromRGB(18, 9, 12),
+    Card = Color3.fromRGB(29, 13, 17),
+
+    Accent = Color3.fromRGB(220, 35, 59),
+    Selected = Color3.fromRGB(220, 35, 59),
+
+    Text = Color3.fromRGB(240, 225, 225),
+    Muted = Color3.fromRGB(145, 125, 132),
+
+    Font = Enum.Font.Antique,
+
+    AnimationSpeed = 0.28,
+}
+
+-- ÍCONES LUCIDEBLOX
+local Icons = {
+    Test = "rbxassetid://7733960981",
+    Update = "rbxassetid://7733993049",
+    Credits = "rbxassetid://7733964719",
+    EventBrook = "rbxassetid://7743868000",
+    Admin = "rbxassetid://7733765398",
+    Settings = "rbxassetid://7734053495",
+    Player = "rbxassetid://7743875962",
+    Players = "rbxassetid://7743876054",
+    Extra = "rbxassetid://8997388430",
+    Avatar = "rbxassetid://7734056672",
+}
+
+-- LIMPAR VERSÃO ANTERIOR
+local Old = PlayerGui:FindFirstChild("NickzLibrary")
+
+if Old then
+    Old:Destroy()
+end
+
+-- FUNÇÕES AUXILIARES
+local function Create(class, props, parent)
+    local obj = Instance.new(class)
+
+    for property, value in pairs(props) do
+        obj[property] = value
+    end
+
+    obj.Parent = parent
+    return obj
+end
+
+local function Corner(parent, radius)
+    Create("UICorner", {
+        CornerRadius = UDim.new(0, radius)
+    }, parent)
+end
+
+local function Stroke(parent, color, thickness)
+    return Create("UIStroke", {
+        Color = color,
+        Thickness = thickness or 1,
+        Transparency = 0.15
+    }, parent)
+end
+
+local function Animate(obj, properties, duration)
+    local tween = TweenService:Create(
+        obj,
+        TweenInfo.new(
+            duration or Config.AnimationSpeed,
+            Enum.EasingStyle.Quart,
+            Enum.EasingDirection.Out
+        ),
+        properties
+    )
+
+    tween:Play()
+    return tween
+end
+
+-- SCREEN GUI
+local Gui = Create("ScreenGui", {
+    Name = "NickzLibrary",
+    ResetOnSpawn = false,
+    ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+}, PlayerGui)
+
+-- JANELA PRINCIPAL
+local Main = Create("Frame", {
+    Name = "Main",
+    Size = UDim2.fromOffset(Config.Width, Config.Height),
+    Position = UDim2.fromScale(0.5, 0.5),
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    BackgroundColor3 = Config.Background,
+    BorderSizePixel = 0,
+    ClipsDescendants = true
+}, Gui)
+
+Corner(Main, 17)
+Stroke(Main, Config.Accent, 1.5)
+
+-- TOPBAR
+local Topbar = Create("Frame", {
+    Name = "Topbar",
+    Size = UDim2.new(1, 0, 0, 54),
+    BackgroundColor3 = Config.Topbar,
+    BorderSizePixel = 0,
+    ClipsDescendants = true
+}, Main)
+
+Corner(Topbar, 17)
+
+-- PREENCHIMENTO INFERIOR DA TOPBAR
+local TopbarBottomFill = Create("Frame", {
+    Name = "TopbarBottomFill",
+    Size = UDim2.new(1, 0, 0, 18),
+    Position = UDim2.new(0, 0, 1, -18),
+    BackgroundColor3 = Config.Topbar,
+    BorderSizePixel = 0
+}, Topbar)
+
+-- LOGO
+local Logo = Create("ImageLabel", {
+    Size = UDim2.fromOffset(38, 38),
+    Position = UDim2.fromOffset(12, 8),
+    BackgroundTransparency = 1,
+    Image = Config.Logo,
+    ScaleType = Enum.ScaleType.Fit
+}, Topbar)
+
+Corner(Logo, 10)
+Stroke(Logo, Config.Accent, 1)
+
+-- TÍTULO
+local Title = Create("TextLabel", {
+    Size = UDim2.new(0, 190, 1, 0),
+    Position = UDim2.fromOffset(59, 0),
+    BackgroundTransparency = 1,
+    Text = Config.Name,
+    Font = Config.Font,
+    TextSize = 23,
+    TextColor3 = Color3.fromRGB(255, 115, 130),
+    TextXAlignment = Enum.TextXAlignment.Left
+}, Topbar)
+
+-- SELO HALLOWEEN UPDATE
+local HalloweenBadge = Create("Frame", {
+    Name = "HalloweenUpdateBadge",
+    Size = UDim2.fromOffset(116, 23),
+    Position = UDim2.new(0, 250, 0.5, 0),
+    AnchorPoint = Vector2.new(0, 0.5),
+    BackgroundColor3 = Config.Selected,
+    BorderSizePixel = 0
+}, Topbar)
+
+Corner(HalloweenBadge, 7)
+
+Create("TextLabel", {
+    Size = UDim2.new(1, -8, 1, 0),
+    Position = UDim2.fromOffset(4, 0),
+    BackgroundTransparency = 1,
+    Text = "Halloween Update",
+    Font = Config.Font,
+    TextSize = 11,
+    TextColor3 = Color3.fromRGB(255, 255, 255),
+    TextXAlignment = Enum.TextXAlignment.Center
+}, HalloweenBadge)
+
+-- VERSÃO
+local Version = Create("TextLabel", {
+    Size = UDim2.fromOffset(50, 20),
+    Position = UDim2.new(0, 375, 0.5, 0),
+    AnchorPoint = Vector2.new(0, 0.5),
+    BackgroundTransparency = 1,
+    Text = Config.Version,
+    Font = Config.Font,
+    TextSize = 10,
+    TextColor3 = Config.Muted
+}, Topbar)
+
+-- MINIMIZAR
+local Minimize = Create("TextButton", {
+    Size = UDim2.fromOffset(30, 34),
+    Position = UDim2.new(1, -72, 0.5, 0),
+    AnchorPoint = Vector2.new(0, 0.5),
+    BackgroundTransparency = 1,
+    Text = "−",
+    Font = Config.Font,
+    TextSize = 25,
+    TextColor3 = Config.Text,
+    AutoButtonColor = false
+}, Topbar)
+
+-- FECHAR
+local Close = Create("TextButton", {
+    Size = UDim2.fromOffset(30, 34),
+    Position = UDim2.new(1, -37, 0.5, 0),
+    AnchorPoint = Vector2.new(0, 0.5),
+    BackgroundTransparency = 1,
+    Text = "×",
+    Font = Config.Font,
+    TextSize = 25,
+    TextColor3 = Config.Accent,
+    AutoButtonColor = false
+}, Topbar)
+
+Close.MouseButton1Click:Connect(function()
+    Gui:Destroy()
+end)
+
+-- SIDEBAR
+local Sidebar = Create("Frame", {
+    Name = "Sidebar",
+    Size = UDim2.new(0, 145, 1, -54),
+    Position = UDim2.fromOffset(0, 54),
+    BackgroundColor3 = Config.Sidebar,
+    BorderSizePixel = 0,
+    ClipsDescendants = true
+}, Main)
+
+Corner(Sidebar, 17)
+
+Create("Frame", {
+    Name = "SidebarTopFill",
+    Size = UDim2.new(1, 0, 0, 17),
+    Position = UDim2.fromOffset(0, 0),
+    BackgroundColor3 = Config.Sidebar,
+    BorderSizePixel = 0
+}, Sidebar)
+
+Create("Frame", {
+    Name = "SidebarRightFill",
+    Size = UDim2.new(0, 17, 1, -17),
+    Position = UDim2.new(1, -17, 0, 17),
+    BackgroundColor3 = Config.Sidebar,
+    BorderSizePixel = 0
+}, Sidebar)
+
+local TabList = Create("ScrollingFrame", {
+    Name = "TabList",
+    Size = UDim2.new(1, -12, 1, -14),
+    Position = UDim2.fromOffset(6, 7),
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    ScrollBarThickness = 2,
+    ScrollBarImageColor3 = Config.Accent,
+    AutomaticCanvasSize = Enum.AutomaticSize.Y,
+    CanvasSize = UDim2.new()
+}, Sidebar)
+
+Create("UIListLayout", {
+    Padding = UDim.new(0, 7),
+    SortOrder = Enum.SortOrder.LayoutOrder
+}, TabList)
+
+-- CONTEÚDO
+local Content = Create("Frame", {
+    Name = "Content",
+    Size = UDim2.new(1, -157, 1, -66),
+    Position = UDim2.fromOffset(151, 59),
+    BackgroundTransparency = 1,
+    ClipsDescendants = true
+}, Main)
+
+-- PÁGINAS
+local Pages = {}
+local TabButtons = {}
+local SelectedTab = nil
+
+-- SELEÇÃO ANIMADA
+local function SelectTab(name)
+    if not Pages[name] then
+        return
+    end
+
+    if SelectedTab == name then
+        return
+    end
+
+    SelectedTab = name
+
+    for tabName, page in pairs(Pages) do
+        local active = tabName == name
+        local data = TabButtons[tabName]
+
+        page.Visible = active
+
+        if active then
+            data.Gradient.Enabled = true
+            data.Gradient.Offset = Vector2.new(-1, 0)
+
+            Animate(data.Gradient, {
+                Offset = Vector2.new(0, 0)
+            }, 0.38)
+
+            Animate(data.Button, {
+                BackgroundColor3 = Color3.new(1, 1, 1)
+            }, 0.2)
+
+            Animate(data.Stroke, {
+                Transparency = 0.05,
+                Thickness = 1.2
+            }, 0.2)
+
+            data.Indicator.Visible = true
+            data.Indicator.Size = UDim2.new(0, 4, 0, 0)
+
+            Animate(data.Indicator, {
+                Size = UDim2.new(0, 4, 0, 27)
+            }, 0.3)
+
+            Animate(data.Label, {
+                TextColor3 = Config.Text
+            }, 0.2)
+
+            Animate(data.Icon, {
+                ImageColor3 = Color3.fromRGB(255, 255, 255)
+            }, 0.2)
+
+            Animate(data.Arrow, {
+                TextTransparency = 0,
+                Position = UDim2.new(1, -20, 0.5, -15)
+            }, 0.2)
+
+        else
+            data.Gradient.Enabled = false
+
+            Animate(data.Button, {
+                BackgroundColor3 = Config.Card
+            }, 0.2)
+
+            Animate(data.Stroke, {
+                Transparency = 1,
+                Thickness = 1
+            }, 0.2)
+
+            data.Indicator.Visible = false
+
+            Animate(data.Label, {
+                TextColor3 = Config.Muted
+            }, 0.2)
+
+            Animate(data.Icon, {
+                ImageColor3 = Config.Muted
+            }, 0.2)
+
+            Animate(data.Arrow, {
+                TextTransparency = 0.2,
+                Position = UDim2.new(1, -23, 0.5, -15)
+            }, 0.2)
+        end
+    end
+end
+
+-- CRIAR ABA
+local function CreatePage(name, icon)
+    local Button = Create("TextButton", {
+        Name = name .. "Tab",
+        Size = UDim2.new(1, -2, 0, 43),
+        BackgroundColor3 = Config.Card,
+        Text = "",
+        AutoButtonColor = false,
+        ClipsDescendants = true
+    }, TabList)
+
+    Corner(Button, 12)
+
+    local ButtonStroke = Stroke(Button, Config.Accent, 1)
+    ButtonStroke.Transparency = 1
+
+    local Gradient = Create("UIGradient", {
+        Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(225, 30, 55)),
+            ColorSequenceKeypoint.new(0.48, Color3.fromRGB(135, 18, 34)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(32, 8, 13))
+        }),
+        Rotation = 0,
+        Enabled = false,
+        Offset = Vector2.new(-1, 0)
+    }, Button)
+
+    local Indicator = Create("Frame", {
+        Size = UDim2.new(0, 4, 0, 27),
+        Position = UDim2.fromOffset(0, 8),
+        BackgroundColor3 = Color3.fromRGB(255, 45, 65),
+        BorderSizePixel = 0,
+        Visible = false
+    }, Button)
+
+    Corner(Indicator, 5)
+
+    local Icon = Create("ImageLabel", {
+        Size = UDim2.fromOffset(20, 20),
+        Position = UDim2.fromOffset(12, 11),
+        BackgroundTransparency = 1,
+        Image = icon or "",
+        ImageColor3 = Config.Muted,
+        ScaleType = Enum.ScaleType.Fit
+    }, Button)
+
+    local Label = Create("TextLabel", {
+        Size = UDim2.new(1, -65, 1, 0),
+        Position = UDim2.fromOffset(45, 0),
+        BackgroundTransparency = 1,
+        Text = name,
+        Font = Config.Font,
+        TextSize = 12,
+        TextColor3 = Config.Muted,
+        TextXAlignment = Enum.TextXAlignment.Left
+    }, Button)
+
+    local Arrow = Create("TextLabel", {
+        Size = UDim2.fromOffset(18, 30),
+        Position = UDim2.new(1, -23, 0.5, -15),
+        BackgroundTransparency = 1,
+        Text = "›",
+        Font = Config.Font,
+        TextSize = 23,
+        TextColor3 = Config.Accent,
+        TextTransparency = 0.2
+    }, Button)
+
+    local Page = Create("ScrollingFrame", {
+        Name = name .. "Page",
+        Size = UDim2.fromScale(1, 1),
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
+        ScrollBarThickness = 3,
+        ScrollBarImageColor3 = Config.Accent,
+        AutomaticCanvasSize = Enum.AutomaticSize.Y,
+        CanvasSize = UDim2.new(),
+        Visible = false
+    }, Content)
+
+    Create("UIListLayout", {
+        Padding = UDim.new(0, 9),
+        SortOrder = Enum.SortOrder.LayoutOrder
+    }, Page)
+
+    Create("UIPadding", {
+        PaddingTop = UDim.new(0, 5),
+        PaddingLeft = UDim.new(0, 5),
+        PaddingRight = UDim.new(0, 10),
+        PaddingBottom = UDim.new(0, 10)
+    }, Page)
+
+    Pages[name] = Page
+
+    TabButtons[name] = {
+        Button = Button,
+        Icon = Icon,
+        Label = Label,
+        Arrow = Arrow,
+        Stroke = ButtonStroke,
+        Indicator = Indicator,
+        Gradient = Gradient
+    }
+
+    Button.MouseButton1Click:Connect(function()
+        SelectTab(name)
+    end)
+
+    return Page
+end
+
+-- SEÇÕES
+local function Section(parent, text)
+    local Frame = Create("Frame", {
+        Size = UDim2.new(1, 0, 0, 52),
+        BackgroundColor3 = Config.Card,
+        BorderSizePixel = 0
+    }, parent)
+
+    Corner(Frame, 12)
+
+    Create("Frame", {
+        Size = UDim2.new(0, 5, 0, 28),
+        Position = UDim2.fromOffset(11, 12),
+        BackgroundColor3 = Config.Accent,
+        BorderSizePixel = 0
+    }, Frame)
+
+    Create("TextLabel", {
+        Size = UDim2.new(1, -32, 1, 0),
+        Position = UDim2.fromOffset(25, 0),
+        BackgroundTransparency = 1,
+        Text = text,
+        Font = Config.Font,
+        TextSize = 19,
+        TextColor3 = Config.Text,
+        TextXAlignment = Enum.TextXAlignment.Left
+    }, Frame)
+
+    return Frame
+end
+
+-- BOTÃO
+local function ButtonElement(parent, text, callback)
+    local Button = Create("TextButton", {
+        Size = UDim2.new(1, 0, 0, 57),
+        BackgroundColor3 = Config.Card,
+        Text = "",
+        AutoButtonColor = false
+    }, parent)
+
+    Corner(Button, 12)
+    Stroke(Button, Color3.fromRGB(75, 24, 32), 1)
+
+    local AccentBar = Create("Frame", {
+        Size = UDim2.new(0, 5, 0, 31),
+        Position = UDim2.fromOffset(10, 13),
+        BackgroundColor3 = Config.Accent,
+        BorderSizePixel = 0
+    }, Button)
+
+    Corner(AccentBar, 5)
+
+    Create("TextLabel", {
+        Size = UDim2.new(1, -55, 1, 0),
+        Position = UDim2.fromOffset(25, 0),
+        BackgroundTransparency = 1,
+        Text = text,
+        Font = Config.Font,
+        TextSize = 14,
+        TextColor3 = Config.Text,
+        TextXAlignment = Enum.TextXAlignment.Left
+    }, Button)
+
+    Create("TextLabel", {
+        Size = UDim2.fromOffset(25, 35),
+        Position = UDim2.new(1, -32, 0.5, -17),
+        BackgroundTransparency = 1,
+        Text = "›",
+        Font = Config.Font,
+        TextSize = 27,
+        TextColor3 = Config.Accent
+    }, Button)
+
+    Button.MouseButton1Click:Connect(function()
+        Animate(Button, {
+            BackgroundColor3 = Config.Selected
+        }, 0.12)
+
+        task.delay(0.15, function()
+            if Button.Parent then
+                Animate(Button, {
+                    BackgroundColor3 = Config.Card
+                }, 0.2)
+            end
+        end)
+
+        if callback then
+            callback()
+        end
+    end)
+
+    return Button
+end
+
+-- TOGGLE
+local function ToggleElement(parent, text, default, callback)
+    local State = default or false
+
+    local Frame = Create("Frame", {
+        Size = UDim2.new(1, 0, 0, 57),
+        BackgroundColor3 = Config.Card,
+        BorderSizePixel = 0
+    }, parent)
+
+    Corner(Frame, 12)
+    Stroke(Frame, Color3.fromRGB(75, 24, 32), 1)
+
+    Create("TextLabel", {
+        Size = UDim2.new(1, -85, 1, 0),
+        Position = UDim2.fromOffset(15, 0),
+        BackgroundTransparency = 1,
+        Text = text,
+        Font = Config.Font,
+        TextSize = 13,
+        TextColor3 = Config.Text,
+        TextXAlignment = Enum.TextXAlignment.Left
+    }, Frame)
+
+    local Switch = Create("TextButton", {
+        Size = UDim2.fromOffset(48, 25),
+        Position = UDim2.new(1, -61, 0.5, -12),
+        BackgroundColor3 = Color3.fromRGB(65, 55, 58),
+        Text = "",
+        AutoButtonColor = false
+    }, Frame)
+
+    Corner(Switch, 20)
+
+    local Circle = Create("Frame", {
+        Size = UDim2.fromOffset(19, 19),
+        Position = UDim2.fromOffset(3, 3),
+        BackgroundColor3 = Color3.new(1, 1, 1),
+        BorderSizePixel = 0
+    }, Switch)
+
+    Corner(Circle, 20)
+
+    local function Update()
+        Animate(Switch, {
+            BackgroundColor3 = State
+                and Config.Accent
+                or Color3.fromRGB(65, 55, 58)
+        })
+
+        Animate(Circle, {
+            Position = State
+                and UDim2.fromOffset(26, 3)
+                or UDim2.fromOffset(3, 3)
+        })
+
+        if callback then
+            callback(State)
+        end
+    end
+
+    Switch.MouseButton1Click:Connect(function()
+        State = not State
+        Update()
+    end)
+
+    Update()
+
+    return {
+        Set = function(value)
+            State = value
+            Update()
+        end,
+
+        Get = function()
+            return State
+        end
+    }
+end
+
+-- SLIDER
+local function SliderElement(parent, text, min, max, default, callback)
+    assert(max > min, "Slider: max precisa ser maior que min")
+
+    local Value = math.clamp(default or min, min, max)
+
+    local Frame = Create("Frame", {
+        Size = UDim2.new(1, 0, 0, 57),
+        BackgroundColor3 = Config.Card,
+        BorderSizePixel = 0,
+        ClipsDescendants = true
+    }, parent)
+
+    Corner(Frame, 12)
+    Stroke(Frame, Color3.fromRGB(75, 24, 32), 1)
+
+    local AccentBar = Create("Frame", {
+        Size = UDim2.new(0, 5, 0, 31),
+        Position = UDim2.fromOffset(10, 13),
+        BackgroundColor3 = Config.Accent,
+        BorderSizePixel = 0
+    }, Frame)
+
+    Corner(AccentBar, 5)
+
+    local Label = Create("TextLabel", {
+        Size = UDim2.new(1, -160, 1, 0),
+        Position = UDim2.fromOffset(25, 0),
+        BackgroundTransparency = 1,
+        Text = text,
+        Font = Config.Font,
+        TextSize = 14,
+        TextColor3 = Config.Text,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        TextTruncate = Enum.TextTruncate.AtEnd
+    }, Frame)
+
+    local ValueLabel = Create("TextLabel", {
+        Size = UDim2.fromOffset(115, 17),
+        Position = UDim2.new(1, -130, 0, 8),
+        BackgroundTransparency = 1,
+        Text = tostring(Value),
+        Font = Config.Font,
+        TextSize = 12,
+        TextColor3 = Config.Accent,
+        TextXAlignment = Enum.TextXAlignment.Right
+    }, Frame)
+
+    local Bar = Create("TextButton", {
+        Size = UDim2.fromOffset(115, 7),
+        Position = UDim2.new(1, -130, 0, 34),
+        BackgroundColor3 = Color3.fromRGB(65, 30, 37),
+        Text = "",
+        AutoButtonColor = false
+    }, Frame)
+
+    Corner(Bar, 10)
+
+    local Fill = Create("Frame", {
+        Size = UDim2.new((Value - min) / (max - min), 0, 1, 0),
+        BackgroundColor3 = Config.Accent,
+        BorderSizePixel = 0
+    }, Bar)
+
+    Corner(Fill, 10)
+
+    local Dragging = false
+
+    local function SetValue(inputX, instant)
+        local percent = math.clamp(
+            (inputX - Bar.AbsolutePosition.X) / Bar.AbsoluteSize.X,
+            0,
+            1
+        )
+
+        Value = math.floor(min + (max - min) * percent + 0.5)
+        percent = (Value - min) / (max - min)
+
+        ValueLabel.Text = tostring(Value)
+
+        if instant then
+            Fill.Size = UDim2.new(percent, 0, 1, 0)
+        else
+            Animate(Fill, {
+                Size = UDim2.new(percent, 0, 1, 0)
+            }, 0.08)
+        end
+
+        if callback then
+            callback(Value)
+        end
+    end
+
+    Bar.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
+            Dragging = true
+            SetValue(input.Position.X, true)
+        end
+    end)
+
+    UIS.InputChanged:Connect(function(input)
+        if Dragging and (
+            input.UserInputType == Enum.UserInputType.MouseMovement
+            or input.UserInputType == Enum.UserInputType.Touch
+        ) then
+            SetValue(input.Position.X)
+        end
+    end)
+
+    UIS.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1
+        or input.UserInputType == Enum.UserInputType.Touch then
+            Dragging = false
+        end
+    end)
+
+    return {
+        Set = function(value)
+            Value = math.clamp(value, min, max)
+
+            local percent = (Value - min) / (max - min)
+
+            Fill.Size = UDim2.new(percent, 0, 1, 0)
+            ValueLabel.Text = tostring(Value)
+
+            if callback then
+                callback(Value)
+            end
+        end,
+
+        Get = function()
+            return Value
+        end
+    }
+end
+
+-- DROPDOWN LIMPO
+local function DropdownElement(parent, text, options, callback)
+    options = options or {}
+
+    local Selected = options[1] or "Selecionar"
+    local Open = false
+
+    local Frame = Create("Frame", {
+        Name = "DropdownElement",
+        Size = UDim2.new(1, 0, 0, 57),
+        BackgroundColor3 = Config.Card,
+        BorderSizePixel = 0,
+        ClipsDescendants = false
+    }, parent)
+
+    Corner(Frame, 12)
+    Stroke(Frame, Color3.fromRGB(75, 24, 32), 1)
+
+    -- DETALHE VERMELHO
+    local AccentBar = Create("Frame", {
+        Size = UDim2.new(0, 5, 0, 31),
+        Position = UDim2.fromOffset(10, 13),
+        BackgroundColor3 = Config.Accent,
+        BorderSizePixel = 0,
+        ZIndex = 6
+    }, Frame)
+
+    Corner(AccentBar, 5)
+
+    -- NOME DA FUNÇÃO
+    local Label = Create("TextLabel", {
+        Size = UDim2.new(0.43, -25, 0, 57),
+        Position = UDim2.fromOffset(25, 0),
+        BackgroundTransparency = 1,
+        Text = text,
+        Font = Config.Font,
+        TextSize = 14,
+        TextColor3 = Config.Text,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        TextTruncate = Enum.TextTruncate.AtEnd,
+        ZIndex = 6
+    }, Frame)
+
+    -- CAMPO DO DROPDOWN SEM ÍCONE
+    local Selector = Create("TextButton", {
+        Size = UDim2.new(0.53, -10, 0, 37),
+        Position = UDim2.new(0.45, 0, 0, 10),
+        BackgroundColor3 = Color3.fromRGB(48, 20, 27),
+        Text = "",
+        AutoButtonColor = false,
+        ZIndex = 7
+    }, Frame)
+
+    Corner(Selector, 8)
+    Stroke(Selector, Color3.fromRGB(90, 30, 42), 1)
+
+    local SelectedLabel = Create("TextLabel", {
+        Size = UDim2.new(1, -20, 1, 0),
+        Position = UDim2.fromOffset(10, 0),
+        BackgroundTransparency = 1,
+        Text = tostring(Selected),
+        Font = Config.Font,
+        TextSize = 12,
+        TextColor3 = Config.Text,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        TextTruncate = Enum.TextTruncate.AtEnd,
+        ZIndex = 8
+    }, Selector)
+
+    -- LISTA DE OPÇÕES
+    local OptionsFrame = Create("Frame", {
+        Name = "DropdownOptions",
+        Size = UDim2.new(0.53, -10, 0, 0),
+        Position = UDim2.new(0.45, 0, 0, 52),
+        BackgroundColor3 = Color3.fromRGB(35, 14, 20),
+        BorderSizePixel = 0,
+        Visible = false,
+        ClipsDescendants = true,
+        ZIndex = 20
+    }, Frame)
+
+    Corner(OptionsFrame, 8)
+    Stroke(OptionsFrame, Config.Accent, 1)
+
+    local OptionsList = Create("ScrollingFrame", {
+        Size = UDim2.new(1, -6, 1, -6),
+        Position = UDim2.fromOffset(3, 3),
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
+        ScrollBarThickness = 2,
+        ScrollBarImageColor3 = Config.Accent,
+        AutomaticCanvasSize = Enum.AutomaticSize.Y,
+        CanvasSize = UDim2.new(),
+        ZIndex = 21
+    }, OptionsFrame)
+
+    Create("UIListLayout", {
+        Padding = UDim.new(0, 3),
+        SortOrder = Enum.SortOrder.LayoutOrder
+    }, OptionsList)
+
+    Create("UIPadding", {
+        PaddingTop = UDim.new(0, 2),
+        PaddingBottom = UDim.new(0, 2)
+    }, OptionsList)
+
+    local function BuildOptions()
+        for _, child in ipairs(OptionsList:GetChildren()) do
+            if child:IsA("TextButton") then
+                child:Destroy()
+            end
+        end
+
+        for _, option in ipairs(options) do
+            local OptionButton = Create("TextButton", {
+                Size = UDim2.new(1, 0, 0, 32),
+                BackgroundColor3 = Config.Card,
+                BackgroundTransparency = 1,
+                Text = tostring(option),
+                Font = Config.Font,
+                TextSize = 12,
+                TextColor3 = Config.Text,
+                AutoButtonColor = false,
+                ZIndex = 22
+            }, OptionsList)
+
+            Corner(OptionButton, 6)
+
+            OptionButton.MouseEnter:Connect(function()
+                Animate(OptionButton, {
+                    BackgroundTransparency = 0,
+                    BackgroundColor3 = Config.Accent
+                }, 0.15)
+            end)
+
+            OptionButton.MouseLeave:Connect(function()
+                Animate(OptionButton, {
+                    BackgroundTransparency = 1
+                }, 0.15)
+            end)
+
+            OptionButton.MouseButton1Click:Connect(function()
+                Selected = option
+                SelectedLabel.Text = tostring(option)
+
+                Open = false
+
+                Animate(Frame, {
+                    Size = UDim2.new(1, 0, 0, 57)
+                }, 0.18)
+
+                Animate(OptionsFrame, {
+                    Size = UDim2.new(0.53, -10, 0, 0)
+                }, 0.15)
+
+                task.delay(0.16, function()
+                    if OptionsFrame.Parent and not Open then
+                        OptionsFrame.Visible = false
+                    end
+                end)
+
+                if callback then
+                    callback(option)
+                end
+            end)
+        end
+    end
+
+    BuildOptions()
+
+    local function CloseDropdown()
+        if not Open then
+            return
+        end
+
+        Open = false
+
+        Animate(Frame, {
+            Size = UDim2.new(1, 0, 0, 57)
+        }, 0.18)
+
+        Animate(OptionsFrame, {
+            Size = UDim2.new(0.53, -10, 0, 0)
+        }, 0.15)
+
+        task.delay(0.16, function()
+            if OptionsFrame.Parent and not Open then
+                OptionsFrame.Visible = false
+            end
+        end)
+    end
+
+    Selector.MouseButton1Click:Connect(function()
+        if Open then
+            CloseDropdown()
+            return
+        end
+
+        Open = true
+        OptionsFrame.Visible = true
+
+        local Height = math.min(#options * 35 + 6, 175)
+
+        Animate(Frame, {
+            Size = UDim2.new(1, 0, 0, 57 + Height + 8)
+        }, 0.2)
+
+        OptionsFrame.Size = UDim2.new(0.53, -10, 0, 0)
+
+        Animate(OptionsFrame, {
+            Size = UDim2.new(0.53, -10, 0, Height)
+        }, 0.2)
+    end)
+
+    return {
+        Set = function(value)
+            for _, option in ipairs(options) do
+                if option == value then
+                    Selected = value
+                    SelectedLabel.Text = tostring(value)
+
+                    if callback then
+                        callback(value)
+                    end
+
+                    break
+                end
+            end
+        end,
+
+        Get = function()
+            return Selected
+        end,
+
+        Refresh = function(newOptions)
+            options = newOptions or {}
+            Selected = options[1] or "Selecionar"
+            SelectedLabel.Text = tostring(Selected)
+
+            BuildOptions()
+
+            if Open then
+                CloseDropdown()
+            end
+        end
+    }
+end
+
+-- CRIAR ABAS
+local Test = CreatePage("Test", Icons.Test)
+local Updates = CreatePage("Update", Icons.Update)
+local Credits = CreatePage("Credits", Icons.Credits)
+local EventBrook = CreatePage("Event Brook", Icons.EventBrook)
+local Admin = CreatePage("Admin", Icons.Admin)
+local Settings = CreatePage("Settings", Icons.Settings)
+local PlayerTab = CreatePage("Player", Icons.Player)
+local PlayersTab = CreatePage("Players", Icons.Players)
+local Extra = CreatePage("Extra", Icons.Extra)
+local Avatar = CreatePage("Avatar", Icons.Avatar)
+
+-- TEST
+Section(Test, "Nickz Library Examples")
+
+ButtonElement(Test, "Button Example", function()
+    print("Nickz Library: Button clicked!")
+end)
+
+ToggleElement(Test, "Toggle Example", false, function(value)
+    print("Toggle:", value)
+end)
+
+SliderElement(Test, "Slider Example", 0, 100, 65, function(value)
+    print("Slider:", value)
+end)
+
+DropdownElement(Test, "Select Player", {
+    "Player 1",
+    "Player 2",
+    "Player 3",
+    "Player 4",
+    "Player 5"
+}, function(value)
+    print("Player selecionado:", value)
+end)
+
+-- UPDATE
+Section(Updates, "Updates")
+
+ButtonElement(Updates, "Nickz Library V1.6", function()
+    print("Current version: V1.6")
+end)
+
+ButtonElement(Updates, "Halloween Update", function()
+    print("Halloween update!")
+end)
+
+ButtonElement(Updates, "Interface Improvements", function()
+    print("Interface updated!")
+end)
+
+-- CREDITS
+Section(Credits, "Credits")
+
+ButtonElement(Credits, "Created by Nickz", function()
+    print("Nickz Library")
+end)
+
+ButtonElement(Credits, "Lucide Icons", function()
+    print("LucideBlox icon collection")
+end)
+
+-- EVENT BROOK
+Section(EventBrook, "Event Brook")
+
+ButtonElement(EventBrook, "Event Brook Example", function()
+    print("Event Brook selected")
+end)
+
+-- ADMIN
+Section(Admin, "Admin")
+
+ButtonElement(Admin, "Admin Example", function()
+    print("Admin example")
+end)
+
+ToggleElement(Admin, "Admin Toggle", false, function(value)
+    print("Admin Toggle:", value)
+end)
+
+-- SETTINGS
+Section(Settings, "Interface Settings")
+
+ToggleElement(Settings, "Example Setting", true, function(value)
+    print("Setting:", value)
+end)
+
+ToggleElement(Settings, "Interface Animation", true, function(value)
+    print("Animation:", value)
+end)
+
+-- PLAYER
+Section(PlayerTab, "Player")
+
+ButtonElement(PlayerTab, "Player Example", function()
+    print("Player selected")
+end)
+
+SliderElement(PlayerTab, "Example Slider", 0, 100, 50, function(value)
+    print("Player value:", value)
+end)
+
+-- PLAYERS
+Section(PlayersTab, "Players")
+
+ButtonElement(PlayersTab, "Player List Example", function()
+    print("Players example")
+end)
+
+-- EXTRA
+Section(Extra, "Extra")
+
+ButtonElement(Extra, "Example Extra", function()
+    print("Extra clicked!")
+end)
+
+ToggleElement(Extra, "Extra Toggle", false, function(value)
+    print("Extra:", value)
+end)
+
+-- AVATAR
+Section(Avatar, "Avatar")
+
+ButtonElement(Avatar, "Avatar Example", function()
+    print("Avatar example")
+end)
+
+-- SELECIONAR TEST
+SelectTab("Test")
+
+-- MINIMIZAR / RESTAURAR
+local Minimized = false
+
+Minimize.MouseButton1Click:Connect(function()
+    Minimized = not Minimized
+
+    if Minimized then
+        Sidebar.Visible = false
+        Content.Visible = false
+
+        -- REMOVE O PREENCHIMENTO QUE DEIXAVA OS CANTOS QUADRADOS
+        TopbarBottomFill.Visible = false
+
+        Animate(Main, {
+            Size = UDim2.fromOffset(Config.Width, 54)
+        }, 0.25)
+
+        Minimize.Text = "+"
+
+    else
+        Animate(Main, {
+            Size = UDim2.fromOffset(Config.Width, Config.Height)
+        }, 0.25)
+
+        -- RESTAURA O PREENCHIMENTO DA TOPBAR
+        TopbarBottomFill.Visible = true
+
+        task.delay(0.25, function()
+            if Main.Parent then
+                Sidebar.Visible = true
+                Content.Visible = true
+            end
+        end)
+
+        Minimize.Text = "−"
+    end
+end)
+
+-- ARRASTAR JANELA
+local Dragging = false
+local DragStart
+local StartPosition
+
+Topbar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+        Dragging = true
+        DragStart = input.Position
+        StartPosition = Main.Position
+    end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if Dragging and (
+        input.UserInputType == Enum.UserInputType.MouseMovement
+        or input.UserInputType == Enum.UserInputType.Touch
+    ) then
+        local Delta = input.Position - DragStart
+
+        Main.Position = UDim2.new(
+            StartPosition.X.Scale,
+            StartPosition.X.Offset + Delta.X,
+            StartPosition.Y.Scale,
+            StartPosition.Y.Offset + Delta.Y
+        )
+    end
+end)
+
+UIS.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+        Dragging = false
+    end
+end)
+
+print("Nickz Library V1.6 loaded!")
